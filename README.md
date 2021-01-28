@@ -73,7 +73,7 @@ aws ecs create-service \
 - Create CodeDeploy Resources: CodeDeploy Application
 ```
 aws deploy create-application \
---application-name ecs-blog-app \
+--application-name linearecs-app \
 --compute-platform ECS \
 --region ap-southeast-1
 ```
