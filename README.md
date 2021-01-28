@@ -41,6 +41,35 @@ aws ecs create-service \
 --region ap-southeast-1
 ```
 
+```
+{
+    "cluster": "linearecs-ECSCluster-SM7VqD1GvNGg",
+    "serviceName": "linearecs-svc",
+    "taskDefinition": "arn:aws:ecs:ap-southeast-1:182101634518:task-definition/linearecs-svc:1",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/linea-Targe-17BJT8FG061WT/f620652f18439815",
+            "containerName": "linearecs-svc",
+            "containerPort": 80
+        }
+    ],
+    "launchType": "FARGATE",
+    "schedulingStrategy": "REPLICA",
+    "deploymentController": {
+        "type": "CODE_DEPLOY"
+    },
+    "platformVersion": "LATEST",
+    "networkConfiguration": {
+       "awsvpcConfiguration": {
+          "assignPublicIp": "ENABLED",
+          "securityGroups": ["sg-0c538577d92e180e6"],
+          "subnets": ["subnet-02f1e28d40fbb103d", "subnet-062403bf900755b7a"]
+       }
+    },
+    "desiredCount": 2
+}
+```
+
 - Create CodeDeploy Resources: CodeDeploy Application
 ```
 aws deploy create-application \
