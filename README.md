@@ -148,7 +148,8 @@ aws deploy create-deployment-group \
 
 - Observice linear deployment
 
-
+## References
+- https://aws.amazon.com/blogs/containers/aws-codedeploy-now-supports-linear-and-canary-deployments-for-amazon-ecs/
 
 
 
