@@ -85,9 +85,68 @@ aws deploy create-deployment-group \
 --region ap-southeast-1
 ```
 
-- We're ready to deploy!
+```
+{
+	"applicationName": "linearecs-app",
+	"deploymentGroupName": "linearecs-app-dg",
+	"deploymentConfigName": "CodeDeployDefault.ECSLinear10PercentEvery1Minutes",
+	"serviceRoleArn": "arn:aws:iam::182101634518:role/linearecs-EcsRoleForCodeDeploy-EC7NNZMX79AA",
 
+	"deploymentStyle": {
+		"deploymentType": "BLUE_GREEN",
+		"deploymentOption": "WITH_TRAFFIC_CONTROL"
+	},
+	"blueGreenDeploymentConfiguration": {
+		"terminateBlueInstancesOnDeploymentSuccess": {
+			"action": "TERMINATE",
+			"terminationWaitTimeInMinutes": 5
+		},
+		"deploymentReadyOption": {
+			"actionOnTimeout": "CONTINUE_DEPLOYMENT"
+		}
+	},
+	"loadBalancerInfo": {
+		"targetGroupPairInfoList": [{
+			"targetGroups": [{
+					"name": "linea-Targe-17BJT8FG061WT"
+				},
+				{
+					"name": "linea-Targe-1LYABM8TGVZJ5"
+				}
+			],
+			"prodTrafficRoute": {
+				"listenerArns": [
+					"arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/linea-Publi-1BHWQ3H2IKOES/747722d5859d647a/3470639a4da30578"
+				]
+			},
+			"testTrafficRoute": {
+					"listenerArns": [
+						"arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/linea-Publi-1BHWQ3H2IKOES/747722d5859d647a/a33bf6a2cfc270ec"
+					]
+			}
+		}]
+	},
+	"ecsServices": [{
+		"serviceName": "linearecs-svc",
+		"clusterName": "linearecs-ECSCluster-SM7VqD1GvNGg"
+	}]
+}
+```
 
+- We're ready to deploy. Go to: AWS Console > ECS Cluster > View Service
+
+- Go to AWS Console > CodeDeploy > Applications > View Deployment Group
+
+- Go to AWS Console > EC2 > ALB > View external DNS
+
+- Go to AWS Console > ECS Task Definitions > Create new revision > Contaniner Definitions > Container Name > Add (v2) to Image > Click Update
+```
+182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v2
+```
+
+- Update ECS service to use new Task Definition revision and trigger a CodeDeploy linear deployment. ECS Cluster Console > Services > Service Name > Click on Update > Select Revision 2 > Click on Next Step, Accept all Defaults > Updare Service
+
+- Observice linear deployment
 
 
 
