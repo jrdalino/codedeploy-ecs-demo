@@ -202,7 +202,7 @@ aws deploy create-application \
 - Go to AWS Console > EC2 > ALB > View external DNS: http://ecs-b-publi-ve736ddh3n40-1396101962.ap-southeast-1.elb.amazonaws.com/
 ```
 
-## Let's Deploy! 
+## Part 4: Let's Deploy! 
 - Let's create a revision of the Task Definition being used and tell ECS to use the new task set Container Image URI: V2
 ```
 - Go to AWS Console > ECS > ECS Task Definitions > Check the box beside "ecs-blog-svc" > Create new revision
@@ -219,9 +219,15 @@ aws deploy create-application \
 ```
 
 ## Cleanup
+### Clean Up for Part 4 (Rollback)
+- Go to AWS Console > ECS Cluster Console > Services > Check the box beside "ecs-blog-svc" > Click Update
+- Select Revision 1 > Click on Next Step, Accept all Defaults > Update Service
+- Observe linear deployment: AWS Console > CodeDeploy Console > Deployemnts
+- Validate using Browser: http://ecs-b-publi-ve736ddh3n40-1396101962.ap-southeast-1.elb.amazonaws.com/
+
 ### Clean Up for Part 3 
-- Delete Deployment Group
-- Delete Application
+- Delete CodeDeploy Deployment Group
+- Delete CodeApplication
 
 ### Clean Up for Part 2
 - Delete ECS Service
