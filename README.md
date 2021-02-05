@@ -192,15 +192,7 @@ aws deploy create-deployment-group \
 - https://aws.amazon.com/blogs/containers/aws-codedeploy-now-supports-linear-and-canary-deployments-for-amazon-ecs/
 
 ## Appendix: Update my AWS Access Key
+- Go to https://wknc.awsapps.com/start#/ > Command line or programmatic access and copy credentials
 ```
 % vi ~/.aws/credentials
 ```
-
-
-
-
-
-
-
-
-
