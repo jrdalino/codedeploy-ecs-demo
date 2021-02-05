@@ -1,24 +1,24 @@
 # codedeploy-ecs-demo
 
-- Pull the Github Repo that supports this blog
+- Pull the Github Repo that supports this blog. This repo has two (2) branches master: blue and v2: green
 ```
-git clone git@github.com:aws-samples/aws-codedeploy-linear-canary-deployments-blog.git
+% git clone git@github.com:aws-samples/aws-codedeploy-linear-canary-deployments-blog.git
 ```
 
 - Create ECR Repo
 ```
-aws ecr create-repository \
+% aws ecr create-repository \
 --repository-name ecs-sample-app \
 --region ap-southeast-1
 ```
 
 - Build and push blue/green container images to the Amazon ECR repository (V1)
 ```
-cd ~/environment/aws-codedeploy-linear-canary-deployments-blog/Docker
-aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com
-docker build -t ecs-sample-app .
-docker tag ecs-sample-app:latest 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v1
-docker push 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v1
+% cd ~/environment/aws-codedeploy-linear-canary-deployments-blog/Docker
+% aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com
+% docker build -t ecs-sample-app .
+% docker tag ecs-sample-app:latest 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v1
+% docker push 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v1
 ```
 
 - Do the same for V2
@@ -28,6 +28,30 @@ docker build -t ecs-sample-app .
 docker tag ecs-sample-app:latest 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v2
 docker push 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v2
 ```
+
+- Check Docker Images locally
+```
+% docker images
+REPOSITORY                                                         TAG               IMAGE ID       CREATED       SIZE
+182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app   v2                1bea669782de   8 hours ago   22.3MB
+ecs-sample-app                                                     latest            1bea669782de   8 hours ago   22.3MB
+182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app   v1                256a20c88ee2   8 hours ago   22.3MB
+nginx                                                              mainline-alpine   629df02b47c8   7 weeks ago   22.3MB
+```
+
+- Check Docker Images Pushed to ECR
+```
+https://ap-southeast-1.console.aws.amazon.com/ecr/repositories?region=ap-southeast-1
+```
+
+
+
+
+
+
+
+
+
 
 - Create CloudFormation Stack
 ```
@@ -150,12 +174,27 @@ aws deploy create-deployment-group \
 
 ## Clearnup
 - Delete ECR Repo
-
+```
+% aws ecr batch-delete-image --repository-name ecs-sample-app --image-ids imageTag=v2
+% aws ecr delete-repository \
+--repository-name ecs-sample-app
+```
+- Delete Local Docker Images
+```
+% docker image rm -f <image_id>
+```
+- Delete Local Git Repo
+```
+% rm -rf aws-codedeploy-linear-canary-deployments-blog
+```
 
 ## References
 - https://aws.amazon.com/blogs/containers/aws-codedeploy-now-supports-linear-and-canary-deployments-for-amazon-ecs/
 
-
+## Appendix: Update my AWS Access Key
+```
+% vi ~/.aws/credentials
+```
 
 
 
