@@ -23,10 +23,10 @@
 
 - Do the same for V2
 ```
-git fetch && git checkout v2
-docker build -t ecs-sample-app .
-docker tag ecs-sample-app:latest 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v2
-docker push 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v2
+% git fetch && git checkout v2
+% docker build -t ecs-sample-app .
+% docker tag ecs-sample-app:latest 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v2
+% docker push 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v2
 ```
 
 - Check Docker Images locally
