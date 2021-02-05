@@ -71,16 +71,21 @@ OUTPUTS:
 
 | Key | Value | 
 | --- | ----- | 
-| ApplicationName                 | ecs-blog-ap | 
+| ApplicationName                 | ecs-blog-app | 
 | DeploymentGroupName             | ecs-blog-app-dg | 
-| ECSTaskExecutionRole            | arn:aws:iam::182101634518:role/ecs-blog-ECSTaskExecutionRole-1J7HBSWQ4UGI | 
-| EcsRoleForCodeDeploy            | arn:aws:iam::182101634518:role/ecs-blog-EcsRoleForCodeDeploy-1S22N373MH8X4	|
-| ExternalUrl                     | http://ecs-b-Publi-VE736DDH3N40-1396101962.ap-southeast-1.elb.amazonaws.com	|
+| EcsRoleForCodeDeploy            | arn:aws:iam::182101634518:role/ecs-blog-EcsRoleForCodeDeploy-1S22N373MH8X4 |
+| TargetGroup1Name	          | ecs-b-Targe-15DFR1XALQKIU | 
+| TargetGroup2Name	          | ecs-b-Targe-10W9GARCREMEF |
 | PublicListener1                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/ecs-b-Publi-VE736DDH3N40/6bc988be78395133/75ca6591207822f9 | 
 | PublicListener2                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/ecs-b-Publi-VE736DDH3N40/6bc988be78395133/e13fc925ed906e53 | 
-| TargetGroup1Name	          | ecs-b-Targe-15DFR1XALQKIU | 
+| Servicename                     | ecs-blog-svc | 
+| ClusterName	                  | ecs-blog-ECSCluster-dZuc0OQbylBP | 
+
+| Key | Value | 
+| --- | ----- | 
+| ECSTaskExecutionRole            | arn:aws:iam::182101634518:role/ecs-blog-ECSTaskExecutionRole-1J7HBSWQ4UGI | 
+| ExternalUrl                     | http://ecs-b-Publi-VE736DDH3N40-1396101962.ap-southeast-1.elb.amazonaws.com	|
 | TargetGroup2Arn                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/ecs-b-Targe-10W9GARCREMEF/9a1ee0dbf3859d3c |
-| TargetGroup2Name	          | ecs-b-Targe-10W9GARCREMEF |
 
 - Create an Amazon ECS Service for blue/green deployments
 ```
@@ -127,7 +132,7 @@ OUTPUTS:
 - Create CodeDeploy Resources: CodeDeploy Application
 ```
 aws deploy create-application \
---application-name linearecs-app \
+--application-name ecs-blog-app \
 --compute-platform ECS \
 --region ap-southeast-1
 ```
@@ -138,10 +143,10 @@ aws deploy create-application \
 ```
 ```
 {
-	"applicationName": "linearecs-app",
-	"deploymentGroupName": "linearecs-app-dg",
+	"applicationName": "ecs-blog-app",
+	"deploymentGroupName": "ecs-blog-app-dg",
 	"deploymentConfigName": "CodeDeployDefault.ECSLinear10PercentEvery1Minutes",
-	"serviceRoleArn": "arn:aws:iam::182101634518:role/linearecs-EcsRoleForCodeDeploy-EC7NNZMX79AA",
+	"serviceRoleArn": "arn:aws:iam::182101634518:role/ecs-blog-EcsRoleForCodeDeploy-1S22N373MH8X4",
 
 	"deploymentStyle": {
 		"deploymentType": "BLUE_GREEN",
@@ -159,32 +164,32 @@ aws deploy create-application \
 	"loadBalancerInfo": {
 		"targetGroupPairInfoList": [{
 			"targetGroups": [{
-					"name": "linea-Targe-17BJT8FG061WT"
+					"name": "ecs-b-Targe-15DFR1XALQKIU"
 				},
 				{
-					"name": "linea-Targe-1LYABM8TGVZJ5"
+					"name": "ecs-b-Targe-10W9GARCREMEF"
 				}
 			],
 			"prodTrafficRoute": {
 				"listenerArns": [
-					"arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/linea-Publi-1BHWQ3H2IKOES/747722d5859d647a/3470639a4da30578"
+					"arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/ecs-b-Publi-VE736DDH3N40/6bc988be78395133/75ca6591207822f9"
 				]
 			},
 			"testTrafficRoute": {
 					"listenerArns": [
-						"arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/linea-Publi-1BHWQ3H2IKOES/747722d5859d647a/a33bf6a2cfc270ec"
+						"arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/ecs-b-Publi-VE736DDH3N40/6bc988be78395133/e13fc925ed906e53"
 					]
 			}
 		}]
 	},
 	"ecsServices": [{
-		"serviceName": "linearecs-svc",
-		"clusterName": "linearecs-ECSCluster-SM7VqD1GvNGg"
+		"serviceName": "ecs-blog-svc",
+		"clusterName": "ecs-blog-ECSCluster-dZuc0OQbylBP"
 	}]
 }
 ```
 ```
-aws deploy create-deployment-group \
+% aws deploy create-deployment-group \
 --cli-input-json file://code_deployment_group.json \
 --region ap-southeast-1
 ```
