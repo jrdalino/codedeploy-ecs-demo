@@ -194,12 +194,17 @@ aws deploy create-application \
 --region ap-southeast-1
 ```
 
-- Let's Deploy 
+- Let's Review what we've created 
 ```
-- Go to: AWS Console > ECS Cluster > View Service
-- Go to AWS Console > CodeDeploy > Applications > View Deployment Group
-- Go to AWS Console > EC2 > ALB > View external DNS
-- Go to AWS Console > ECS Task Definitions > Create new revision > Contaniner Definitions > Container Name > Add (v2) to Image > Click Update
+- View ECS Service and Tasks: AWS Console > ECS Cluster > View Service & Tasks
+- View Application Load Balancer, Listerners & Target Groups
+- Review Deployment Group: AWS Console > CodeDeploy > Applications > View Deployment Group
+- Go to AWS Console > EC2 > ALB > View external DNS: http://ecs-b-publi-ve736ddh3n40-1396101962.ap-southeast-1.elb.amazonaws.com/
+```
+
+- Let's Deploy!
+```
+- Go to AWS Console > ECS Task Definitions > Create new revision > Container Definitions > Container Name > Add (v2) to Image > Click Update
 - Update ECS service to use new Task Definition revision and trigger a CodeDeploy linear deployment. ECS Cluster Console > Services > Service Name > Click on > Update > Select Revision 2 > Click on Next Step, Accept all Defaults > Updare Service
 - Observe linear deployment
 ```
