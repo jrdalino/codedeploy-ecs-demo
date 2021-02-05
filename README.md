@@ -44,21 +44,31 @@ nginx                                                              mainline-alpi
 https://ap-southeast-1.console.aws.amazon.com/ecr/repositories?region=ap-southeast-1
 ```
 
-
-
-
-
-
-
-
-
-
-- Create CloudFormation Stack
+-  Launch CloudFormation Stack to create VPC w/ 2 Subnets, ECS Fargate, ALB
 ```
-Image: 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v1
+% cat ~/environment/aws-codedeploy-linear-canary-deployments-blog/cloudformation/linear_ecs.yaml
+```
+```
+INPUTS
+- Stack Name: ecs-blog
+- ImageURL: 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v1
+```
+```
+OUTPUTS
+cluster:
+serviceName:
+taskDefinition
+loadBalancer > targetGroupArm
+containerName: 
+seurityGroups
+subnets:
 ```
 
-- Update JSON file and Create an Amazon ECS Service for blue/gree deployments
+- Create an Amazon ECS Service for blue/gree deployments
+```
+% vi ~/environment/aws-codedeploy-linear-canary-deployments-blog/json_files/create_service.json
+```
+
 ```
 aws ecs create-service \
 --cli-input-json file://create_service.json \
@@ -172,7 +182,7 @@ aws deploy create-deployment-group \
 
 - Observice linear deployment
 
-## Clearnup
+## Cleanup
 - Delete ECR Repo
 ```
 % aws ecr batch-delete-image --repository-name ecs-sample-app --image-ids imageTag=v2
