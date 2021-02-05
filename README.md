@@ -202,11 +202,20 @@ aws deploy create-application \
 - Go to AWS Console > EC2 > ALB > View external DNS: http://ecs-b-publi-ve736ddh3n40-1396101962.ap-southeast-1.elb.amazonaws.com/
 ```
 
-- Let's Deploy!
+## Let's Deploy! 
+- Let's create a revision of the Task Definition being used and tell ECS to use the new task set Container Image URI: V2
 ```
-- Go to AWS Console > ECS Task Definitions > Create new revision > Container Definitions > Container Name > Add (v2) to Image > Click Update
-- Update ECS service to use new Task Definition revision and trigger a CodeDeploy linear deployment. ECS Cluster Console > Services > Service Name > Click on > Update > Select Revision 2 > Click on Next Step, Accept all Defaults > Updare Service
-- Observe linear deployment
+- Go to AWS Console > ECS > ECS Task Definitions > Check the box beside "ecs-blog-svc" > Create new revision
+- Scroll down > Container Definitions > Click on Container Name "ecs-blog-svc"
+- Replace Image from "v1" to "v2" > Scroll Down Click Update and Create
+```
+
+- Update ECS service to use new Task Definition revision and trigger a CodeDeploy linear deployment.
+```
+- Go to AWS Console > ECS Cluster Console > Services > Check the box beside "ecs-blog-svc" > Click Update
+- Select Revision 2 > Click on Next Step, Accept all Defaults > Update Service
+- Observe linear deployment: AWS Console > CodeDeploy Console > Deployemnts
+- Validate using Browser: http://ecs-b-publi-ve736ddh3n40-1396101962.ap-southeast-1.elb.amazonaws.com/
 ```
 
 ## Cleanup
