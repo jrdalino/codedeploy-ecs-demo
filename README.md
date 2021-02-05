@@ -194,22 +194,26 @@ aws deploy create-application \
 --region ap-southeast-1
 ```
 
-- We're ready to deploy. Go to: AWS Console > ECS Cluster > View Service
-
+- Let's Deploy 
+```
+- Go to: AWS Console > ECS Cluster > View Service
 - Go to AWS Console > CodeDeploy > Applications > View Deployment Group
-
 - Go to AWS Console > EC2 > ALB > View external DNS
-
 - Go to AWS Console > ECS Task Definitions > Create new revision > Contaniner Definitions > Container Name > Add (v2) to Image > Click Update
+- Update ECS service to use new Task Definition revision and trigger a CodeDeploy linear deployment. ECS Cluster Console > Services > Service Name > Click on > Update > Select Revision 2 > Click on Next Step, Accept all Defaults > Updare Service
+- Observe linear deployment
 ```
-182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v2
-```
-
-- Update ECS service to use new Task Definition revision and trigger a CodeDeploy linear deployment. ECS Cluster Console > Services > Service Name > Click on Update > Select Revision 2 > Click on Next Step, Accept all Defaults > Updare Service
-
-- Observice linear deployment
 
 ## Cleanup
+### Clean Up for Part 3 
+- Delete Deployment Group
+- Delete Application
+
+### Clean Up for Part 2
+- Delete ECS Service
+- Delete CloudFormation Template (ECS, ALB, VPC)
+
+### Clean Up for Part 1
 - Delete ECR Repo
 ```
 % aws ecr batch-delete-image --repository-name ecs-sample-app --image-ids imageTag=v2
