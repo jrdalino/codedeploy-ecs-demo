@@ -83,9 +83,7 @@ OUTPUTS:
 
 | Key | Value | 
 | --- | ----- | 
-| ECSTaskExecutionRole            | arn:aws:iam::182101634518:role/ecs-blog-ECSTaskExecutionRole-1J7HBSWQ4UGI | 
 | ExternalUrl                     | http://ecs-b-Publi-VE736DDH3N40-1396101962.ap-southeast-1.elb.amazonaws.com	|
-| TargetGroup2Arn                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/ecs-b-Targe-10W9GARCREMEF/9a1ee0dbf3859d3c |
 
 - Create an Amazon ECS Service for blue/green deployments
 ```
