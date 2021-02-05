@@ -1,5 +1,7 @@
 # codedeploy-ecs-demo
 
+## Part 1: Prepare and push container images to the remote repo
+
 - Pull the Github Repo that supports this blog. This repo has two (2) branches master: blue and v2: green
 ```
 % git clone git@github.com:aws-samples/aws-codedeploy-linear-canary-deployments-blog.git
@@ -43,6 +45,8 @@ nginx                                                              mainline-alpi
 ```
 https://ap-southeast-1.console.aws.amazon.com/ecr/repositories?region=ap-southeast-1
 ```
+
+## Part 2: Prepare Networking, LB, ECS Cluster, ECS Service
 
 -  Launch CloudFormation Stack to create VPC w/ 2 Subnets, ECS Fargate, ALB
 ```
@@ -116,18 +120,9 @@ OUTPUTS:
 --region ap-southeast-1
 ```
 
+- Go to URL: ecs-b-Publi-VE736DDH3N40-1396101962.ap-southeast-1.elb.amazonaws.com
 
-
-
-
-
-
-
-
-
-
-
-
+## Part 3: Create the CodeDeploy Resources
 
 - Create CodeDeploy Resources: CodeDeploy Application
 ```
@@ -139,11 +134,8 @@ aws deploy create-application \
 
 - Update JSON File and Create CodeDeploy Resources: CodeDeploy Deployment Group
 ```
-aws deploy create-deployment-group \
---cli-input-json file://code_deployment_group.json \
---region ap-southeast-1
+% vi ~/environment/aws-codedeploy-linear-canary-deployments-blog/json_files/code_deployment_group.json
 ```
-
 ```
 {
 	"applicationName": "linearecs-app",
@@ -190,6 +182,11 @@ aws deploy create-deployment-group \
 		"clusterName": "linearecs-ECSCluster-SM7VqD1GvNGg"
 	}]
 }
+```
+```
+aws deploy create-deployment-group \
+--cli-input-json file://code_deployment_group.json \
+--region ap-southeast-1
 ```
 
 - We're ready to deploy. Go to: AWS Console > ECS Cluster > View Service
