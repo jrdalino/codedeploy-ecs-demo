@@ -49,51 +49,48 @@ https://ap-southeast-1.console.aws.amazon.com/ecr/repositories?region=ap-southea
 % cat ~/environment/aws-codedeploy-linear-canary-deployments-blog/cloudformation/linear_ecs.yaml
 ```
 ```
-INPUTS
+INPUTS:
 - Stack Name: ecs-blog
 - ImageURL: 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/ecs-sample-app:v1
+
+OUTPUTS:
 ```
 | Key | Value | 
 | --- | ----- | 
-| ApplicationName                 | ecs-blog-ap | 
 | ClusterName	                  | ecs-blog-ECSCluster-dZuc0OQbylBP | 
+| Servicename                     | ecs-blog-svc | 
+| TaskDefinitionArn               | arn:aws:ecs:ap-southeast-1:182101634518:task-definition/ecs-blog-svc:1 |
+| TargetGroup1Arn                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/ecs-b-Targe-15DFR1XALQKIU/bf1976921edb755a |
+| PublicLoadBalancerSecurityGroup | sg-0aa2f50f00d8d90b8 | 
+| PrivateSubnetOne                | subnet-06c11555fdd2fe1f8 |
+| PrivateSubnetTwo                | subnet-01bca9ecc887f20a5 |
+
+| ApplicationName                 | ecs-blog-ap | 
 | DeploymentGroupName             | ecs-blog-app-dg | 
 | ECSTaskExecutionRole            | arn:aws:iam::182101634518:role/ecs-blog-ECSTaskExecutionRole-1J7HBSWQ4UGI | 
 | EcsRoleForCodeDeploy            | arn:aws:iam::182101634518:role/ecs-blog-EcsRoleForCodeDeploy-1S22N373MH8X4	|
 | ExternalUrl                     | http://ecs-b-Publi-VE736DDH3N40-1396101962.ap-southeast-1.elb.amazonaws.com	|
-| PrivateSubnetOne                | subnet-06c11555fdd2fe1f8 |
-| PrivateSubnetTwo                | subnet-01bca9ecc887f20a5 |
+
 | PublicListener1                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/ecs-b-Publi-VE736DDH3N40/6bc988be78395133/75ca6591207822f9 | 
 | PublicListener2                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/ecs-b-Publi-VE736DDH3N40/6bc988be78395133/e13fc925ed906e53 | 
-| PublicLoadBalancerSecurityGroup | sg-0aa2f50f00d8d90b8 | 
-| Servicename                     | ecs-blog-svc | 
-| TargetGroup1Arn                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/ecs-b-Targe-15DFR1XALQKIU/bf1976921edb755a |
+
 | TargetGroup1Name	          | ecs-b-Targe-15DFR1XALQKIU | 
 | TargetGroup2Arn                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/ecs-b-Targe-10W9GARCREMEF/9a1ee0dbf3859d3c |
 | TargetGroup2Name	          | ecs-b-Targe-10W9GARCREMEF |
-| TaskDefinitionArn               | arn:aws:ecs:ap-southeast-1:182101634518:task-definition/ecs-blog-svc:1 |
 
-
-- Create an Amazon ECS Service for blue/gree deployments
+- Create an Amazon ECS Service for blue/green deployments
 ```
 % vi ~/environment/aws-codedeploy-linear-canary-deployments-blog/json_files/create_service.json
 ```
-
-```
-aws ecs create-service \
---cli-input-json file://create_service.json \
---region ap-southeast-1
-```
-
 ```
 {
-    "cluster": "linearecs-ECSCluster-SM7VqD1GvNGg",
-    "serviceName": "linearecs-svc",
-    "taskDefinition": "arn:aws:ecs:ap-southeast-1:182101634518:task-definition/linearecs-svc:1",
+    "cluster": "ecs-blog-ECSCluster-dZuc0OQbylBP",
+    "serviceName": "ecs-blog-svc",
+    "taskDefinition": "arn:aws:ecs:ap-southeast-1:182101634518:task-definition/ecs-blog-svc:1",
     "loadBalancers": [
         {
-            "targetGroupArn": "arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/linea-Targe-17BJT8FG061WT/f620652f18439815",
-            "containerName": "linearecs-svc",
+            "targetGroupArn": "arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/ecs-b-Targe-15DFR1XALQKIU/bf1976921edb755a",
+            "containerName": "ecs-blog-svc",
             "containerPort": 80
         }
     ],
@@ -106,13 +103,31 @@ aws ecs create-service \
     "networkConfiguration": {
        "awsvpcConfiguration": {
           "assignPublicIp": "ENABLED",
-          "securityGroups": ["sg-0c538577d92e180e6"],
-          "subnets": ["subnet-02f1e28d40fbb103d", "subnet-062403bf900755b7a"]
+          "securityGroups": ["sg-0aa2f50f00d8d90b8"],
+          "subnets": ["subnet-06c11555fdd2fe1f8", "subnet-01bca9ecc887f20a5"]
        }
     },
     "desiredCount": 2
 }
 ```
+```
+% aws ecs create-service \
+--cli-input-json file://create_service.json \
+--region ap-southeast-1
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 - Create CodeDeploy Resources: CodeDeploy Application
 ```
