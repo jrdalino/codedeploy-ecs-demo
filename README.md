@@ -65,15 +65,15 @@ OUTPUTS:
 | PrivateSubnetOne                | subnet-06c11555fdd2fe1f8 |
 | PrivateSubnetTwo                | subnet-01bca9ecc887f20a5 |
 
+| Key | Value | 
+| --- | ----- | 
 | ApplicationName                 | ecs-blog-ap | 
 | DeploymentGroupName             | ecs-blog-app-dg | 
 | ECSTaskExecutionRole            | arn:aws:iam::182101634518:role/ecs-blog-ECSTaskExecutionRole-1J7HBSWQ4UGI | 
 | EcsRoleForCodeDeploy            | arn:aws:iam::182101634518:role/ecs-blog-EcsRoleForCodeDeploy-1S22N373MH8X4	|
 | ExternalUrl                     | http://ecs-b-Publi-VE736DDH3N40-1396101962.ap-southeast-1.elb.amazonaws.com	|
-
 | PublicListener1                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/ecs-b-Publi-VE736DDH3N40/6bc988be78395133/75ca6591207822f9 | 
 | PublicListener2                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:listener/app/ecs-b-Publi-VE736DDH3N40/6bc988be78395133/e13fc925ed906e53 | 
-
 | TargetGroup1Name	          | ecs-b-Targe-15DFR1XALQKIU | 
 | TargetGroup2Arn                 | arn:aws:elasticloadbalancing:ap-southeast-1:182101634518:targetgroup/ecs-b-Targe-10W9GARCREMEF/9a1ee0dbf3859d3c |
 | TargetGroup2Name	          | ecs-b-Targe-10W9GARCREMEF |
