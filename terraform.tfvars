@@ -29,7 +29,7 @@ aws_subnet_gateway_name     = "foo-bar-gateway-subnet"
 aws_subnet_application_name = "foo-bar-application-subnet"
 
 # ECR Repository
-aws_ecr_repository_name                 = "foo-bar-ecs"
+aws_ecr_repository_name                 = "foo-bar-ecr"
 aws_ecr_repository_image_tag_mutability = "MUTABLE"
 aws_ecr_repository_scan_on_push         = "false"
 
