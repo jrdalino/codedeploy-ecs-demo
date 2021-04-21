@@ -26,24 +26,72 @@ resource "aws_ecs_cluster" "this" {
 
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE"
-    weight            = "100" 
+    weight            = "100"
     base              = "1"
   }
 
   setting {
-    name = "containerInsight"
+    name  = "containerInsights"
     value = "enabled"
   }
 
   depends_on = [
     aws_cloudwatch_log_group.this,
-  ]  
+  ]
 }
 
 # S3 Bucket for ALB Logs
 resource "aws_s3_bucket" "this" {
   bucket = var.aws_s3_bucket_name
   acl    = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowELBRootAccount",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${var.aws_account}:root"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${var.aws_s3_bucket_name}/*"
+    },
+    {
+      "Sid": "AWSLogDeliveryWrite",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "delivery.logs.amazonaws.com"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${var.aws_s3_bucket_name}/*",
+      "Condition": {
+        "StringEquals": {
+          "s3:x-amz-acl": "bucket-owner-full-control"
+        }
+      }
+    },
+    {
+      "Sid": "AWSLogDeliveryAclCheck",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "delivery.logs.amazonaws.com"
+      },
+      "Action": "s3:GetBucketAcl",
+      "Resource": "arn:aws:s3:::${var.aws_s3_bucket_name}"
+    }
+  ]
+}
+POLICY
 }
 
 # ALB Security Group
@@ -51,38 +99,37 @@ resource "aws_security_group" "alb_sg" {
   description = "Access to the public facing load balancer"
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "Default" 
-    protocol         = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Default"
+    protocol    = "-1"
   }
 
   ingress {
-    from_port        = 80
-    to_port          = 80
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "HTTP Port 80"
-    protocol         = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "HTTP Port 80"
+    protocol    = "tcp"
   }
 
   ingress {
-    from_port        = 8080
-    to_port          = 8080
-    cidr_blocks      = ["0.0.0.0/0"]
-    description      = "HTTP Port 8080"    
-    protocol         = "tcp"
-  }  
+    from_port   = 8080
+    to_port     = 8080
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "HTTP Port 8080"
+    protocol    = "tcp"
+  }
 
   name                   = var.aws_security_group_name
   revoke_rules_on_delete = false
-
-  vpc_id = aws_vpc.this.id
+  vpc_id                 = aws_vpc.this.id
 }
 
 # ALB
 resource "aws_lb" "this" {
-  name                       = "aws_lb"
+  name                       = var.aws_lb_name
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = [aws_security_group.alb_sg.id]
@@ -90,7 +137,7 @@ resource "aws_lb" "this" {
 
   access_logs {
     bucket  = aws_s3_bucket.this.bucket
-    prefix  = "aws_lb"
+    prefix  = var.aws_lb_name
     enabled = true
   }
 
@@ -109,13 +156,13 @@ resource "aws_lb_target_group" "blue" {
   # deregistration_delay = 300
 
   health_check {
-    enabled             = true
-    healthy_threshold   = 2
-    interval            = 6
+    enabled           = true
+    healthy_threshold = 2
+    interval          = 6
     # matcher
-    path                =  "/"
-    port                = 80
-    protocol            = "HTTP"
+    path     = "/"
+    port     = 80
+    protocol = "HTTP"
     # protocol_version
     timeout             = 5
     unhealthy_threshold = 2
@@ -127,7 +174,7 @@ resource "aws_lb_target_group" "blue" {
   port                          = 80
   # preserve_client_ip
   # protocol_version              = "HTTP1"
-  protocol                      = "HTTP"
+  protocol = "HTTP"
   # proxy_protocol_v2 # For NLB Only
   # slow_start = 0
   # stickiness {}
@@ -145,16 +192,16 @@ resource "aws_lb_target_group" "green" {
   # deregistration_delay = 300
 
   health_check {
-    enabled             = true
-    healthy_threshold   = 2
-    interval            = 6
+    enabled           = true
+    healthy_threshold = 2
+    interval          = 6
     # matcher
-    path                =  "/"
-    port                = 80
-    protocol            = "HTTP"
+    path     = "/"
+    port     = 80
+    protocol = "HTTP"
     # protocol_version
     timeout             = 5
-    unhealthy_threshold =  2
+    unhealthy_threshold = 2
   }
 
   # lambda_multi_value_headers_enabled # For Lambda Target only
@@ -163,7 +210,7 @@ resource "aws_lb_target_group" "green" {
   port                          = 80
   # preserve_client_ip
   # protocol_version              = "HTTP1"
-  protocol                      = "HTTP"
+  protocol = "HTTP"
   # proxy_protocol_v2 # For NLB Only
   # slow_start = 0
   # stickiness {}
@@ -186,7 +233,7 @@ resource "aws_lb_listener" "blue" {
   load_balancer_arn = aws_lb.this.arn
   # alpn_policy
   # certificate_arn
-  port     = "80"
+  port     = 80
   protocol = "HTTP"
   # ssl_policy
 
@@ -205,7 +252,7 @@ resource "aws_lb_listener" "green" {
   load_balancer_arn = aws_lb.this.arn
   # alpn_policy
   # certificate_arn  
-  port     = "8080"
+  port     = 8080
   protocol = "HTTP"
   # ssl_policy
 
@@ -216,7 +263,7 @@ resource "aws_lb_listener" "green" {
 
 # ECS Task Execution Role
 resource "aws_iam_role" "ecs_task_role" {
-  name = var.ecs_task_role_name
+  name               = var.ecs_task_role_name
   assume_role_policy = <<EOF
 {
   "Version": "2008-10-17",
@@ -235,8 +282,8 @@ EOF
 
 # ECS Task Execution Role Policy
 resource "aws_iam_role_policy_attachment" "ecs_task_role" {
-  role = aws_iam_role.ecs_task_role.name
-  policy = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  role       = aws_iam_role.ecs_task_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 # ECS Task Definition
@@ -253,7 +300,7 @@ resource "aws_ecs_task_definition" "this" {
       portMappings = [
         {
           hostPort      = 80
-          protocol      = "tcp"          
+          protocol      = "tcp"
           containerPort = 80
         }
       ]
@@ -267,11 +314,11 @@ resource "aws_ecs_task_definition" "this" {
       }
     }
   ])
-  
-  execution_role_arn = aws_iam_role.ecs_task_role.arn
-  network_mode       = "awsvpc"
-  cpu    = 256
-  memory = 512 
+
+  execution_role_arn       = aws_iam_role.ecs_task_role.arn
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
   requires_compatibilities = ["FARGATE"]
 }
 

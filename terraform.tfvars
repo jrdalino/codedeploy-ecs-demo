@@ -60,7 +60,7 @@ aws_ecs_task_definition_name = "foo-bar-ecs-task-definition"
 # ECS Service
 
 # ECS Role for CodeDeploy & Policy
-ecs_codedeploy_role_name  = "foo-bar-codedeploy-service-role"
+ecs_codedeploy_role_name = "foo-bar-codedeploy-service-role"
 
 # CodeDeploy App
 aws_codedeploy_app_name = "foo-bar-codedeploy-app"
@@ -69,4 +69,4 @@ aws_codedeploy_app_name = "foo-bar-codedeploy-app"
 aws_codedeploy_deployment_config_name = "foo-bar-codedeploy-config"
 
 # CodeDeploy Group
-aws_codedeploy_deployment_group_name  = "foo-bar-codedeploy-group"
+aws_codedeploy_deployment_group_name = "foo-bar-codedeploy-group"
