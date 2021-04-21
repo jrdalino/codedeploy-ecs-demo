@@ -33,7 +33,7 @@ resource "aws_iam_role_policy" "passRoleForCodeDeploy" {
     "Version": "2012-10-17",
     "Statement": {
         "Action": "iam:PassRole",
-        "Resource": ${aws_iam_role.ecs_task_role.arn},
+        "Resource": "arn:aws:iam::*:role/ecs/*",
         "Effect": "Allow"
     }
 }

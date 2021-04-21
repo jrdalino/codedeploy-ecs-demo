@@ -291,9 +291,9 @@ resource "aws_ecs_service" "this" {
     container_port   = 80
   }
   network_configuration {
-      subnets        = [aws_subnet.application.*.id]
-      security_groups = [aws_security_group.alb_sg.id]
-      assign_public_ip = true
+    subnets          = [aws_subnet.application.*.id[0], aws_subnet.application.*.id[1]]
+    security_groups  = [aws_security_group.alb_sg.id]
+    assign_public_ip = true
   }
   # ordered_placement_strategy
   # placement_constraints
