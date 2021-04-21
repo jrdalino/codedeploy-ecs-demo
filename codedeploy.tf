@@ -93,7 +93,7 @@ resource "aws_codedeploy_deployment_group" "this" {
     }
   }
 
-  deployment_config_name = "CodeDeployDefault.ECSAllAtOnce" #aws_codedeploy_deployment_config.this.name
+  deployment_config_name = "CodeDeployDefault.ECSLinear10PercentEvery1Minutes" #aws_codedeploy_deployment_config.this.name
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
@@ -113,6 +113,10 @@ resource "aws_codedeploy_deployment_group" "this" {
       prod_traffic_route {
         listener_arns = [aws_lb_listener.blue.arn]
       }
+
+      test_traffic_rout {
+        listener_arns = [aws_lb_listener.green.arn]
+      }      
 
       target_group {
         name = aws_lb_target_group.blue.name
