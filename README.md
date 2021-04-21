@@ -1,5 +1,15 @@
 # codedeploy-ecs-demo
 
+## Outcome
+- Give beginners a basic understanding of Terraform, Docker, VPC, ECR, ECS Fargate, ALB Target Groups & Listeners, CodeDeploy
+- Give you a comparison of Deployment Strategies: (Blue/Green, Linear, Canary)
+- Show you a demo of how to do a Linear Deployment
+
+## Working Backwards
+- Create ECS service with CodeDeploy as the controller
+- Create a new deployment group using the new linear configuration
+- Trigger a CodeDeploy blue/green deployment using a preset linear deployment configuration for routing 10 percent of traffic every one minute.
+
 ## Prequisites
 - Reset Resources
 ```
@@ -40,7 +50,7 @@ foo-bar-ecs                                                     latest    e985d8
 ```
 
 - Go to ALB URL: http://foo-bar-alb-1797939265.ap-southeast-1.elb.amazonaws.com/
-
+- Go to ALB URL: http://foo-bar-alb-1797939265.ap-southeast-1.elb.amazonaws.com:8080/
 
 ## Part 2: Let's Deploy a new version
 - Let's create a revision of the Task Definition being used and tell ECS to use the new task set Container Image URI: V2
