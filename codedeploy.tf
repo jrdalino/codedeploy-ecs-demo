@@ -114,9 +114,9 @@ resource "aws_codedeploy_deployment_group" "this" {
         listener_arns = [aws_lb_listener.blue.arn]
       }
 
-      test_traffic_rout {
+      test_traffic_route {
         listener_arns = [aws_lb_listener.green.arn]
-      }      
+      }
 
       target_group {
         name = aws_lb_target_group.blue.name
