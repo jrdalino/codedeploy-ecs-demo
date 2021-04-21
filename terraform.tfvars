@@ -1,6 +1,6 @@
 # General
 aws_region  = "ap-southeast-1"
-aws_account = "623552185285" # AWS account where resource will be created
+aws_account = "182101634518" # AWS account where resource will be created
 aws_role    = "OrganizationAccountAccessRole"
 
 # Tagging
@@ -37,7 +37,7 @@ aws_ecr_repository_scan_on_push         = "false"
 aws_ecs_cluster_name = "foo-bar-ecs"
 
 # S3 Bucket for ALB Logs
-aws_s3_bucket_name = "623552185285-foo-bar-alb-logs"
+aws_s3_bucket_name = "182101634518-foo-bar-alb-logs"
 
 # ALB Security Group
 aws_security_group_name = "foo-bar-alb-security-group"
