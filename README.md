@@ -74,7 +74,7 @@ foo-bar-ecs                                                     latest    e985d8
 - Go to AWS Console > ECS Cluster Console > Services > Check the box beside "ecs-blog-svc" > Click Update
 - Select Revision 1 > Click on Next Step, Accept all Defaults > Update Service
 - Observe linear deployment: AWS Console > CodeDeploy Console > Deployemnts
-- Validate using Browser: http://ecs-b-publi-ve736ddh3n40-1396101962.ap-southeast-1.elb.amazonaws.com/
+- Validate using Browser: http://foo-bar-alb-1797939265.ap-southeast-1.elb.amazonaws.com/
 ```
 
 ## Cleanup
