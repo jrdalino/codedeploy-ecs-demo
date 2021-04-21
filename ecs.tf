@@ -238,7 +238,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name      = var.aws_ecs_task_definition_name
-      image     = "182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/foo-bar-app:v1"
+      image     = "${var.aws_account}.dkr.ecr.${var.aws_region}.amazonaws.com/${var.aws_ecs_task_definition_name}:v1"
       cpu       = 256
       memory    = 512
       essential = true

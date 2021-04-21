@@ -29,7 +29,7 @@ aws_subnet_gateway_name     = "foo-bar-gateway-subnet"
 aws_subnet_application_name = "foo-bar-application-subnet"
 
 # ECR Repository
-aws_ecr_repository_name                 = "foo-bar-ecr"
+aws_ecr_repository_name                 = "foo-bar-ecs"
 aws_ecr_repository_image_tag_mutability = "MUTABLE"
 aws_ecr_repository_scan_on_push         = "false"
 
@@ -49,13 +49,13 @@ aws_lb_target_group_green = "foo-bar-alb-target-group-green"
 # ALB Listeners Blue & Green: No Variables
 
 # ECS Task Execution Role & Policy
-ecs_task_role_name = "foo-bar-codedeploy-service-role"
+ecs_task_role_name = "foo-bar-ecs-task-definition-service-role"
 
 # ECS Task Definition
-aws_ecs_task_definition_name = "foo-bar-ecs-task-definition"
+aws_ecs_task_definition_name = "foo-bar-ecs"
 
 # ECS Service
-aws_ecs_service_name = "foo-bar-ecs-service"
+aws_ecs_service_name = "foo-bar-ecs"
 
 # ECS Role for CodeDeploy & Policy
 ecs_codedeploy_role_name = "foo-bar-codedeploy-service-role"
