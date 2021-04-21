@@ -18,7 +18,7 @@ aws_internet_gateway_name = "foo-bar-internet-gateway"
 
 # Route Tables
 aws_route_table_gateway_name     = "foo-bar-gateway-route-table"
-aws_route_table_application_name = "foo-shared-application-route-table"
+aws_route_table_application_name = "foo-bar-application-route-table"
 
 # NAT Gateway
 aws_eip_name         = "foo-bar-nat-gateway-eip"
