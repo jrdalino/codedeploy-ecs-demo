@@ -109,12 +109,6 @@ variable "aws_ecs_cluster_name" {
   description = "(Required) The name of the cluster (up to 255 letters, numbers, hyphens, and underscores)"
 }
 
-# S3 Bucket for ALB Logs
-variable "aws_s3_bucket_name" {
-  type        = string
-  description = "S3 Bucket for ALB Logs"
-}
-
 # ALB Security Group
 variable "aws_security_group_name" {
   type        = string
@@ -149,10 +143,14 @@ variable "ecs_task_role_name" {
 # ECS Task Definition
 variable "aws_ecs_task_definition_name" {
   type        = string
-  description = "aws_ecs_task_definition_name"
+  description = "AWS ECS Task Definition"
 }
 
 # ECS Service
+variable "aws_ecs_service_name" {
+  type        = string
+  description = "AWS ECS Service"
+}
 
 # ECS Role for CodeDeploy & Policy
 variable "ecs_codedeploy_role_name" {

@@ -40,60 +40,6 @@ resource "aws_ecs_cluster" "this" {
   ]
 }
 
-# S3 Bucket for ALB Logs
-resource "aws_s3_bucket" "this" {
-  bucket = var.aws_s3_bucket_name
-  acl    = "private"
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
-  }
-
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowELBRootAccount",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam::${var.aws_account}:root"
-      },
-      "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${var.aws_s3_bucket_name}/*"
-    },
-    {
-      "Sid": "AWSLogDeliveryWrite",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "delivery.logs.amazonaws.com"
-      },
-      "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::${var.aws_s3_bucket_name}/*",
-      "Condition": {
-        "StringEquals": {
-          "s3:x-amz-acl": "bucket-owner-full-control"
-        }
-      }
-    },
-    {
-      "Sid": "AWSLogDeliveryAclCheck",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "delivery.logs.amazonaws.com"
-      },
-      "Action": "s3:GetBucketAcl",
-      "Resource": "arn:aws:s3:::${var.aws_s3_bucket_name}"
-    }
-  ]
-}
-POLICY
-}
-
 # ALB Security Group
 resource "aws_security_group" "alb_sg" {
   description = "Access to the public facing load balancer"
@@ -135,11 +81,10 @@ resource "aws_lb" "this" {
   security_groups            = [aws_security_group.alb_sg.id]
   drop_invalid_header_fields = false
 
-  access_logs {
-    bucket  = aws_s3_bucket.this.bucket
-    prefix  = var.aws_lb_name
-    enabled = true
-  }
+  # access_logs {
+  #   bucket  = aws_s3_bucket.this.bucket
+  #   enabled = true
+  # }
 
   subnets = aws_subnet.gateway.*.id
   # subnet_mapping
@@ -148,7 +93,7 @@ resource "aws_lb" "this" {
   # enable_cross_zone_load_balancing # This is for NLB's only
   enable_http2 = true
   # customer_owned_ipv4_pool
-  # ip_address_typ
+  # ip_address_type
 }
 
 # ALB Target Group Blue
@@ -323,3 +268,42 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 # ECS Service
+resource "aws_ecs_service" "this" {
+  name = var.aws_ecs_service_name
+  # capacity_provider_strategy
+  cluster = aws_ecs_cluster.this.id
+  # deployment_circuit_breaker
+  deployment_controller {
+    type = "CODE_DEPLOY"
+  }
+  # deployment_maximum_percent
+  # deployment_minimum_healthy_percent
+  desired_count = 2
+  # enable_ecs_managed_tags
+  # enable_execute_command
+  # force_new_deployment
+  # health_check_grace_period_seconds
+  # iam_role
+  launch_type = "FARGATE"
+  load_balancer {
+    target_group_arn = aws_lb_target_group.blue.arn
+    container_name   = var.aws_ecs_service_name
+    container_port   = 80
+  }
+  network_configuration {
+      subnets        = [aws_subnet.application.*.id]
+      security_groups = [aws_security_group.alb_sg.id]
+      assign_public_ip = true
+  }
+  # ordered_placement_strategy
+  # placement_constraints
+  platform_version = "LATEST"
+  # propagate_tags
+  scheduling_strategy = "REPLICA"
+  # service_registries
+  # tags
+  task_definition = aws_ecs_task_definition.this.arn
+  # wait_for_steady_state
+
+  depends_on = [aws_iam_role.ecs_task_role]
+}

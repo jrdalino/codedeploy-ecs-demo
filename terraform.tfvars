@@ -36,9 +36,6 @@ aws_ecr_repository_scan_on_push         = "false"
 # ECS Cluster
 aws_ecs_cluster_name = "foo-bar-ecs"
 
-# S3 Bucket for ALB Logs
-aws_s3_bucket_name = "182101634518-foo-bar-alb-logs"
-
 # ALB Security Group
 aws_security_group_name = "foo-bar-alb-security-group"
 
@@ -58,6 +55,7 @@ ecs_task_role_name = "foo-bar-codedeploy-service-role"
 aws_ecs_task_definition_name = "foo-bar-ecs-task-definition"
 
 # ECS Service
+aws_ecs_service_name = "foo-bar-ecs-service"
 
 # ECS Role for CodeDeploy & Policy
 ecs_codedeploy_role_name = "foo-bar-codedeploy-service-role"
