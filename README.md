@@ -20,12 +20,12 @@
 ## Part 1: Prepare and push container images to the remote repo
 - Clone the repo
 ```
-% git clone https://github.com/jrdalino/aws-codedeploy-linear-canary-deployments-blog
+% git clone https://github.com/jrdalino/nginx-blue-green-demo
 ```
 
 - Build and push blue/green container images to the Amazon ECR repository (V1)
 ```
-% cd ~/environment/aws-codedeploy-linear-canary-deployments-blog/Docker
+% cd ~/environment/nginx-blue-green-demo/Docker
 % aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com
 % docker build -t foo-bar-ecs .
 % docker tag foo-bar-ecs:latest 182101634518.dkr.ecr.ap-southeast-1.amazonaws.com/foo-bar-ecs:v1
@@ -90,7 +90,7 @@ foo-bar-ecs                                                     latest    e985d8
 
 - Delete Local Git Repo
 ```
-% rm -rf aws-codedeploy-linear-canary-deployments-blog
+% rm -rf nginx-blue-green-demo
 ```
 
 ## References
