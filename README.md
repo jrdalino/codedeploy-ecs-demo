@@ -1,19 +1,16 @@
 # codedeploy-ecs-demo
 
-## Outcome
-- Give beginners a basic understanding of Terraform, Docker, VPC, ECR, ECS Fargate, ALB Target Groups & Listeners, CodeDeploy
-- Give you a comparison of Deployment Strategies: (Blue/Green, Linear, Canary)
-- Show you a demo of how to do a Linear Deployment
+## Prerequisites
+- Git
+- AWS Account
+- Terraform
+- Docker
 
-## Working Backwards
-- Create ECS service with CodeDeploy as the controller
-- Create a new deployment group using the new linear configuration
-- Trigger a CodeDeploy blue/green deployment using a preset linear deployment configuration for routing 10 percent of traffic every one minute.
-
-## Prequisites
-- Reset Resources
+## Usage
+- Provision
 ```
-% terraform destroy
+$ cd ~/environment/codedeploy-ecs-demo
+% terraform plan
 % terraform apply
 ```
 
