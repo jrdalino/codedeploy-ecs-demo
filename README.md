@@ -7,8 +7,9 @@
 - Docker
 
 ## Usage
-- Provision
+- Provision Infra using Terraform
 ```
+% git clone https://github.com/jrdalino/codedeploy-ecs-demo
 $ cd ~/environment/codedeploy-ecs-demo
 % terraform plan
 % terraform apply
